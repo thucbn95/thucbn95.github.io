@@ -26,7 +26,7 @@ function animate(){
 }
 
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
-const photos=Array.from({length:10},(_,i)=>`images/${String(i+1).padStart(2,'0')}.jpg`);
+const photos=Array.from({length:10},(_,i)=>`/images/${String(i+1).padStart(2,'0')}.jpg`);
 let sequenceRunning=false;
 let lockedScrollY=0;
 

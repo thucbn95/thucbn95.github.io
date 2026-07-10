@@ -256,12 +256,14 @@ background:#fff7fb;
   justify-content:center;
   opacity:0;
   visibility:hidden;
-  transition:opacity .35s ease;
+  pointer-events:none;
+  transition:opacity .35s ease, visibility .35s ease;
   z-index:9999;
 }
 .story-overlay.show{
   opacity:1;
   visibility:visible;
+  pointer-events:auto;
 }
 
 .storyTitle{
@@ -307,14 +309,14 @@ background:#fff7fb;
     0 0 30px rgba(255,111,184,.35),
     0 0 60px rgba(255,159,197,.25);
   opacity:0;
-  transform:scale(.985);
-  transition:opacity .65s ease, transform .65s ease;
-  will-change:opacity, transform;
+  transform:none;
+  transition:opacity .65s ease;
+  will-change:opacity;
   backface-visibility:hidden;
 }
 .story-image.active{
   opacity:1;
-  transform:scale(1);
+  transform:none;
 }
 .storyCaption{
     position:relative;
@@ -438,10 +440,10 @@ body.story-open::-webkit-scrollbar{
 #celebrate.is-running{opacity:.65;pointer-events:none;transform:none}
 .cinematic-intro{
   position:fixed;inset:0;z-index:10020;display:flex;align-items:center;justify-content:center;
-  padding:24px;background:rgba(25,12,28,.94);opacity:0;visibility:hidden;
+  padding:24px;background:rgba(25,12,28,.94);opacity:0;visibility:hidden;pointer-events:none;
   transition:opacity .6s ease,visibility .6s ease;
 }
-.cinematic-intro.show{opacity:1;visibility:visible}
+.cinematic-intro.show{opacity:1;visibility:visible;pointer-events:auto}
 .cinematic-intro-text{max-width:850px;text-align:center;color:#fff;font-size:clamp(28px,5vw,58px);font-weight:800;line-height:1.35;animation:introPulse 1.8s ease-in-out infinite}
 @keyframes introPulse{50%{transform:scale(1.025);text-shadow:0 0 32px rgba(255,125,180,.75)}}
 .story-progress{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:min(92vw,900px);display:flex;gap:6px;z-index:6}
@@ -450,8 +452,6 @@ body.story-open::-webkit-scrollbar{
 .story-progress span.done::after{width:100%}
 .story-progress span.playing::after{animation:storyFill 2.5s linear forwards}
 @keyframes storyFill{to{width:100%}}
-.story-image.active{animation:kenBurns 2.5s ease-out forwards}
-@keyframes kenBurns{from{transform:scale(1.01)}to{transform:scale(1.085)}}
 .story-end-card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;background:rgba(37,16,39,.82);opacity:0;visibility:hidden;z-index:8;transition:.55s}
 .story-end-card.show{opacity:1;visibility:visible}
 .story-end-card div{text-align:center;color:#fff;font-size:clamp(28px,5vw,56px);font-weight:800;line-height:1.35}
@@ -465,6 +465,52 @@ body.story-open::-webkit-scrollbar{
 .sparkles i{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 12px #fff;animation:twinkle 2.6s ease-in-out infinite}
 @keyframes twinkle{0%,100%{opacity:.12;transform:scale(.65)}50%{opacity:.9;transform:scale(1.35)}}
 
+/* Nút điều khiển cố định */
+.music-toggle,
+.back-to-top{
+  position:fixed;
+  width:54px;
+  height:54px;
+  min-width:54px;
+  min-height:54px;
+  padding:0;
+  margin:0;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:50%;
+  color:#fff;
+  cursor:pointer;
+  line-height:1;
+  text-align:center;
+  box-sizing:border-box;
+  z-index:9000;
+  pointer-events:auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.music-toggle{
+  left:22px;
+  bottom:22px;
+  background:linear-gradient(135deg,var(--pink),#ff7fb2);
+  box-shadow:0 12px 30px rgba(255,95,158,.35);
+}
+.music-toggle span{
+  display:block;
+  width:1em;
+  height:1em;
+  line-height:1em;
+  font-size:24px;
+  transform:translateY(-1px);
+}
+.music-toggle:hover{transform:translateY(-4px) scale(1.08)}
+.music-toggle:active{transform:scale(.96)}
+.back-to-top{z-index:9000}
+.back-to-top svg{display:block;margin:0}
+@media (max-width:760px){
+  .music-toggle{left:15px;bottom:15px}
+}
+
 </style>
 </head>
 <body>
@@ -475,7 +521,7 @@ body.story-open::-webkit-scrollbar{
   <audio id="bgMusic" loop>
     <source src="music/happy-birthday.mp3" type="audio/mpeg">
   </audio>
-  <button id="musicToggle" style="position:fixed;left:20px;bottom:20px;z-index:1000;border:none;border-radius:50%;width:52px;height:52px;background:#ff5f9e;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.2)">🔊</button>
+  <button id="musicToggle" class="music-toggle" type="button" aria-label="Bật hoặc tắt nhạc"><span aria-hidden="true">🔊</span></button>
 
 
   <main class="hero">
@@ -577,10 +623,10 @@ const musicToggle=document.getElementById('musicToggle');
 let musicStarted=false;
 async function startMusic(){
   if(!bgMusic.paused) return;
-  try{bgMusic.volume=.45;await bgMusic.play();musicStarted=true;musicToggle.textContent='🔊';}catch(e){musicToggle.textContent='🔇';}
+  try{bgMusic.volume=.45;await bgMusic.play();musicStarted=true;musicToggle.querySelector('span').textContent='🔊';}catch(e){musicToggle.querySelector('span').textContent='🔇';}
 }
 musicToggle.addEventListener('click',async()=>{
-  if(bgMusic.paused){await startMusic();}else{bgMusic.pause();musicToggle.textContent='🔇';}
+  if(bgMusic.paused){await startMusic();}else{bgMusic.pause();musicToggle.querySelector('span').textContent='🔇';}
 });
 
 const canvas=document.getElementById('confetti');
@@ -605,22 +651,40 @@ async function preloadPhotos(){
   await Promise.all(photos.map(src=>new Promise(resolve=>{const im=new Image();im.onload=im.onerror=resolve;im.src=src;})));
 }
 async function runBirthdaySequence(){
-  if(sequenceRunning)return;sequenceRunning=true;
+  if(sequenceRunning)return;
+  sequenceRunning=true;
+
   const celebrate=document.getElementById('celebrate');
+  const intro=document.getElementById('cinematicIntro');
+  const overlay=document.getElementById('storyOverlay');
+  const imageA=document.getElementById('storyImageA');
+  const imageB=document.getElementById('storyImageB');
+  const endCard=document.getElementById('storyEndCard');
+  const progress=[...document.querySelectorAll('.story-progress span')];
+  const messageBox=document.querySelector('.message');
+
+  // Reset toàn bộ trạng thái cũ để slideshow có thể chạy lại nhiều lần.
+  intro.classList.remove('show');
+  overlay.classList.remove('show');
+  endCard.classList.remove('show');
+  imageA.classList.remove('active');
+  imageB.classList.remove('active');
+  imageA.removeAttribute('src');
+  imageB.removeAttribute('src');
+  progress.forEach(item=>item.classList.remove('playing','done'));
+  messageBox.classList.remove('show');
+  document.body.classList.remove('story-open');
+  void overlay.offsetWidth;
+
   celebrate.classList.add('is-running');
   celebrate.textContent='Món quà đang mở... 💖';
   await startMusic();
   burst();
   await wait(650);
 
-  const intro=document.getElementById('cinematicIntro');
   intro.classList.add('show');
   await wait(2300);
 
-  const overlay=document.getElementById('storyOverlay');
-  const imageA=document.getElementById('storyImageA');
-  const imageB=document.getElementById('storyImageB');
-  const progress=[...document.querySelectorAll('.story-progress span')];
   await preloadPhotos();
   overlay.classList.add('show');
   document.body.classList.add('story-open');
@@ -632,19 +696,24 @@ async function runBirthdaySequence(){
     current.src=photos[i];
     await new Promise(resolve=>{if(current.complete)resolve();else{current.onload=current.onerror=resolve;}});
     current.classList.add('active');
+
+    progress[i].classList.remove('playing','done');
+    void progress[i].offsetWidth;
     progress[i].classList.add('playing');
+
     await wait(2500);
     progress[i].classList.remove('playing');
     progress[i].classList.add('done');
+
     if(i<photos.length-1){
       next.src=photos[i+1];
       await new Promise(resolve=>{if(next.complete)resolve();else{next.onload=next.onerror=resolve;}});
-      next.classList.add('active');current.classList.remove('active');
+      next.classList.add('active');
+      current.classList.remove('active');
       const t=current;current=next;next=t;
     }
   }
 
-  const endCard=document.getElementById('storyEndCard');
   endCard.classList.add('show');
   await wait(2400);
 
@@ -654,12 +723,24 @@ async function runBirthdaySequence(){
   root.style.scrollBehavior='auto';body.style.scrollBehavior='auto';
   window.scrollTo(0,messageSection.getBoundingClientRect().top+window.pageYOffset);
   await new Promise(requestAnimationFrame);
-  overlay.classList.remove('show');document.body.classList.remove('story-open');
+
+  overlay.classList.remove('show');
+  document.body.classList.remove('story-open');
   await wait(700);
-  root.style.scrollBehavior=oldRoot;body.style.scrollBehavior=oldBody;
-  document.querySelector('.message').classList.add('show');
+
+  root.style.scrollBehavior=oldRoot;
+  body.style.scrollBehavior=oldBody;
+  messageBox.classList.add('show');
+
+  // Dọn trạng thái còn lại để lần bấm tiếp theo bắt đầu sạch từ đầu.
+  endCard.classList.remove('show');
+  imageA.classList.remove('active');
+  imageB.classList.remove('active');
+  progress.forEach(item=>item.classList.remove('playing','done'));
+
   celebrate.classList.remove('is-running');
-  celebrate.textContent='Chúc Vợ Yêu sinh nhật thật vui! 🥳';
+  celebrate.textContent='Xem lại bất ngờ 🎉';
+  sequenceRunning=false;
 }
 
 document.getElementById('celebrate').addEventListener('click',runBirthdaySequence);

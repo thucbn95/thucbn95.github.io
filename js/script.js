@@ -4,7 +4,7 @@ const musicToggle=document.getElementById('musicToggle');
 let musicStarted=false;
 async function startMusic(){
   if(!bgMusic.paused) return;
-  try{bgMusic.volume=.45;await bgMusic.play();musicStarted=true;musicToggle.querySelector('span').textContent='🔊';}catch(e){musicToggle.querySelector('span').textContent='🔇';}
+  try{bgMusic.volume=.65;await bgMusic.play();musicStarted=true;musicToggle.querySelector('span').textContent='🔊';}catch(e){musicToggle.querySelector('span').textContent='🔇';}
 }
 musicToggle.addEventListener('click',async()=>{
   if(bgMusic.paused){await startMusic();}else{bgMusic.pause();musicToggle.querySelector('span').textContent='🔇';}

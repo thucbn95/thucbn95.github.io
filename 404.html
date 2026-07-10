@@ -256,7 +256,7 @@ background:#fff7fb;
   justify-content:center;
   opacity:0;
   visibility:hidden;
-  transition:opacity .6s ease, visibility .6s ease;
+  transition:opacity .35s ease;
   z-index:9999;
 }
 .story-overlay.show{
@@ -629,7 +629,7 @@ btn.addEventListener("click", async (e) => {
     nextImage = temp;
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // Giữ lớp slideshow che kín màn hình trong lúc đổi vị trí trang.
   const root = document.documentElement;
@@ -646,13 +646,10 @@ btn.addEventListener("click", async (e) => {
   // Nhảy ngầm tới lời chúc khi overlay vẫn hoàn toàn che kín màn hình.
   window.scrollTo(0, messageTop);
 
-  // Ép trình duyệt hoàn tất layout và paint trước khi làm mờ overlay.
-  void messageSection.offsetHeight;
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-  await new Promise((resolve) => setTimeout(resolve, 120));
+  // Chờ 1 frame để trình duyệt cập nhật vị trí rồi fade ngay.
+  await new Promise(requestAnimationFrame);
 
-  // Chỉ sau khi trang đã đứng yên ở lời chúc mới làm slideshow biến mất.
+  // Fade overlay ngay sau khi trang đã cập nhật.
   overlay.classList.remove("show");
   document.body.classList.remove("story-open");
 

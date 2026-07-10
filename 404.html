@@ -676,6 +676,7 @@ async function runBirthdaySequence(){
   imageA.removeAttribute('src');
   imageB.removeAttribute('src');
   progress.forEach(item=>item.classList.remove('playing','done'));
+  messageBox.classList.add('reveal-message');
   messageBox.classList.remove('show');
   document.body.classList.remove('story-open');
   void overlay.offsetWidth;
@@ -736,6 +737,11 @@ async function runBirthdaySequence(){
   body.style.scrollBehavior=oldBody;
   messageBox.classList.add('show');
 
+  // Sau khi hiệu ứng hoàn tất, trả lời chúc về trạng thái hiển thị bình thường.
+  setTimeout(() => {
+    messageBox.classList.remove('reveal-message', 'show');
+  }, 950);
+
   // Dọn trạng thái còn lại để lần bấm tiếp theo bắt đầu sạch từ đầu.
   endCard.classList.remove('show');
   imageA.classList.remove('active');
@@ -754,7 +760,7 @@ const toggleBackToTop=()=>backToTop.classList.toggle('show',window.scrollY>300);
 window.addEventListener('scroll',toggleBackToTop,{passive:true});toggleBackToTop();
 backToTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-const message=document.querySelector('.message');message.classList.add('reveal-message');
+const message=document.querySelector('.message');
 
 const sparkles=document.getElementById('sparkles');
 for(let i=0;i<40;i++){

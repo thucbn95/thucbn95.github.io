@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>💖</text></svg>">
+<!-- saved from url=(0027)https://thucbn95.github.io/ -->
+<html lang="vi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chúc Mừng Sinh Nhật 🎂</title>
-  <meta name="description" content="Website chúc mừng sinh nhật ngọt ngào và đáng nhớ." />
+  <link rel="icon" href="favicon.png" type="image/png">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chúc mừng sinh nhật Vợ Yêu ❤️</title>
+  <meta name="description" content="Chúc mừng sinh nhật ngọt ngào và đáng nhớ.">
   <style>
     :root{
       --pink:#ff5f9e;
@@ -68,7 +68,7 @@
     }
     h1{
       margin:22px 0 8px;
-      font-size:clamp(42px,8vw,75px);
+      font-size:70px;
       line-height:1.5;
       letter-spacing:-3px;
       background:linear-gradient(90deg,var(--pink),var(--purple));
@@ -76,7 +76,7 @@
       color:transparent;
     }
     .name{
-      font-size:clamp(30px,6vw,64px);
+      font-size:65px;
       font-weight:800;
       margin:10px 0 16px;
 	  color: var(--pink);
@@ -98,7 +98,7 @@
       border:0;
       border-radius:16px;
       padding:14px 20px;
-      font-size:16px;
+      font-size:20px;
       font-weight:700;
       cursor:pointer;
       text-decoration:none;
@@ -178,10 +178,16 @@ color:transparent;
       .wishes{grid-template-columns:1fr}
       .card{padding:34px 20px}
       h1{
-        font-size:clamp(34px,9vw,52px);
+        font-size: 28px;
         letter-spacing:-1px;
         line-height:1.25;
       }
+	  button,.btn{
+      font-size:16px;
+    }
+	  .name{
+	  font-size: 28px;
+	  }
       .section-title{
         font-size:clamp(24px,6.5vw,34px);
         line-height:1.3;
@@ -191,7 +197,7 @@ color:transparent;
         line-height:1.3;
       }
       .eyebrow{
-        font-size:15px;
+        font-size:14px;
         padding:10px 16px;
       }
       .balloon{transform:scale(.8)}
@@ -471,9 +477,6 @@ body.story-open::-webkit-scrollbar{
 @keyframes heartBeat{50%{transform:scale(1.07)}}
 .floating-heart{position:fixed;z-index:10050;pointer-events:none;font-size:18px;animation:heartFly 1.5s ease-out forwards}
 @keyframes heartFly{to{transform:translateY(-90px) scale(1.5) rotate(18deg);opacity:0}}
-.sparkles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
-.sparkles i{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 12px #fff;animation:twinkle 2.6s ease-in-out infinite}
-@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.65)}50%{opacity:.9;transform:scale(1.35)}}
 
 /* Nút điều khiển cố định */
 .music-toggle,
@@ -651,14 +654,30 @@ canvas{
   }
 }
 
+
+/* ===== Noto Color Emoji cục bộ — 14 emoji của website ===== */
+@font-face{
+  font-family:"Noto Color Emoji Local";
+  src:url("fonts/NotoColorEmoji-14.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+html,body,button,.btn,input,textarea,select,option,
+.name,.lead,.message,.wish,.eyebrow,h1,h2,h3,
+.cake,.icon,.storyTitle,.storyCaption,
+.cinematic-intro-text,.final-love,.footer,.music-toggle{
+  font-family:"Noto Color Emoji Local","Segoe UI",Tahoma,Arial,sans-serif !important;
+  font-synthesis:none;
+}
 </style>
 </head>
 <body>
-<div class="sparkles" id="sparkles" aria-hidden="true"></div>
 <div class="cinematic-intro" id="cinematicIntro"><div class="cinematic-intro-text">💖 Anh có một điều muốn dành riêng cho em...</div></div>
-  <canvas id="confetti"></canvas>
+  <canvas id="confetti" width="1920" height="953"></canvas>
 
-  <audio id="bgMusic" loop>
+  <audio id="bgMusic" loop="">
     <source src="music/happy-birthday.mp3" type="audio/mpeg">
   </audio>
   <button id="musicToggle" class="music-toggle" type="button" aria-label="Bật hoặc tắt nhạc"><span aria-hidden="true">🔊</span></button>
@@ -673,13 +692,13 @@ canvas{
       <div class="cake">🎂</div>
       <h1>Chúc Mừng Sinh Nhật</h1>
       <div class="name">Vợ Yêu ❤️</div>
-<div style="font-size:22px;font-weight:600;color:#ff5f9e;margin:8px 0 20px;">🎂 26/07/1999 🎂</div>
+<div style="font-size:22px;font-weight:700;color:#ff5f9e;margin:8px 0 20px;">🎂 26/07/1999 🎂</div>
       <p class="lead">
         Chúc Vợ Yêu bước sang tuổi mới luôn thật xinh đẹp, hạnh phúc, bình an và gặp thật nhiều may mắn. Mong mọi điều tốt đẹp nhất sẽ luôn đến với em, hôm nay và cả những năm tháng sau này. ❤️
       </p>
       <div class="actions">
         <button class="primary" id="celebrate">Bấm để nhận bất ngờ 🎉</button>
-        <a class="btn secondary" href="#loi-chuc" id="viewMessage">Xem lời chúc 💌</a>
+        <a class="btn secondary" href="https://thucbn95.github.io/#loi-chuc" id="viewMessage">Xem lời chúc 💌</a>
       </div>
     </div>
   </main>
@@ -749,15 +768,28 @@ Anh yêu em nhiều hơn tất cả những gì lời nói có thể diễn tả
 
   <button id="backToTop" class="back-to-top" aria-label="Lên đầu trang">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M6 15l6-6 6 6"
-              stroke="currentColor"
-              stroke-width="2.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"/>
+        <path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"></path>
     </svg>
 </button>
 
+
+
+
+<div id="storyOverlay" class="story-overlay">
+  <div class="story-progress"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="storyTitle"><span class="icon">🎂</span><span class="title">Chúc Mừng Sinh Nhật Vợ Yêu</span><span class="icon">❤️</span></div>
+  <div class="story-stage">
+    <img id="storyImageA" class="story-image" src="https://thucbn95.github.io/" alt="Kỷ niệm của chúng mình">
+    <img id="storyImageB" class="story-image" src="https://thucbn95.github.io/" alt="Kỷ niệm của chúng mình">
+  </div>
+  <div class="storyCaption"><span class="heart">💕</span><span class="title">Những khoảnh khắc hạnh phúc của chúng mình</span><span class="heart">💕</span></div>
+  <div id="storyEndCard" class="story-end-card"><div>Cảm ơn em vì đã xuất hiện trong cuộc đời anh ❤️</div></div>
+</div>
+
+
+<span class="floating-heart" style="left: 100px; top: 558px;">💖</span><span class="floating-heart" style="left: 105px; top: 557px;">💖</span><span class="floating-heart" style="left: 509px; top: 504px;">💖</span>
 <script>
+document.addEventListener('DOMContentLoaded', () => {
 const bgMusic=document.getElementById('bgMusic');
 const musicToggle=document.getElementById('musicToggle');
 let musicStarted=false;
@@ -798,7 +830,7 @@ function lockPageScroll(){
 
 function unlockPageScroll(){
   if(!document.body.classList.contains('story-open')) return;
-  unlockPageScroll();
+  document.body.classList.remove('story-open');
   document.body.style.top='';
   window.scrollTo(0,lockedScrollY);
 }
@@ -835,9 +867,9 @@ async function runBirthdaySequence(){
 
   celebrate.classList.add('is-running');
   celebrate.textContent='Món quà đang mở... 💖';
-  await startMusic();
+  startMusic();
   burst();
-  await wait(650);
+  await wait(100);
 
   lockPageScroll();
   intro.classList.add('show');
@@ -920,27 +952,13 @@ backToTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}
 
 const message=document.querySelector('.message');
 
-const sparkles=document.getElementById('sparkles');
-for(let i=0;i<40;i++){
-  const star=document.createElement('i');star.style.left=Math.random()*100+'%';star.style.top=Math.random()*100+'%';star.style.animationDelay=(Math.random()*2.6)+'s';star.style.animationDuration=(1.8+Math.random()*2.2)+'s';sparkles.appendChild(star);
-}
+
 let lastHeart=0;
 document.addEventListener('pointermove',e=>{
   const now=Date.now();if(now-lastHeart<90)return;lastHeart=now;
   const h=document.createElement('span');h.className='floating-heart';h.textContent=Math.random()>.5?'💖':'💕';h.style.left=e.clientX+'px';h.style.top=e.clientY+'px';document.body.appendChild(h);setTimeout(()=>h.remove(),1500);
 });
+});
 </script>
 
-<div id="storyOverlay" class="story-overlay">
-  <div class="story-progress"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-  <div class="storyTitle"><span class="icon">🎂</span><span class="title">Chúc Mừng Sinh Nhật Vợ Yêu</span><span class="icon">❤️</span></div>
-  <div class="story-stage">
-    <img id="storyImageA" class="story-image" src="" alt="Kỷ niệm của chúng mình">
-    <img id="storyImageB" class="story-image" src="" alt="Kỷ niệm của chúng mình">
-  </div>
-  <div class="storyCaption"><span class="heart">💕</span><span class="title">Những khoảnh khắc hạnh phúc của chúng mình</span><span class="heart">💕</span></div>
-  <div id="storyEndCard" class="story-end-card"><div>Cảm ơn em vì đã xuất hiện trong cuộc đời anh ❤️</div></div>
-</div>
-
-</body>
-</html>
+</body></html>

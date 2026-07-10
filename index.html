@@ -209,6 +209,97 @@ background:#fff7fb;
       font-weight: 800;
     }
 
+
+.story-overlay{
+  position:fixed;
+  inset:0;
+
+  background:
+    radial-gradient(circle at 20% 10%, #ffe0ee 0 10%, transparent 35%),
+    radial-gradient(circle at 90% 20%, #e9ddff 0 8%, transparent 32%),
+    linear-gradient(135deg,#fff8f2,#fff0f7 50%,#f4efff);
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .6s ease, visibility .6s ease;
+  z-index:9999;
+}
+.story-overlay.show{
+  opacity:1;
+  visibility:visible;
+}
+.story-stage{
+  position:relative;
+  width:min(90vw,900px);
+  height:min(80vh,800px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+
+.story-image{
+  position:absolute;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:
+    0 0 30px rgba(255,111,184,.35),
+    0 0 60px rgba(255,159,197,.25);
+  opacity:0;
+  transform:scale(.985);
+  transition:opacity .65s ease, transform .65s ease;
+  will-change:opacity, transform;
+  backface-visibility:hidden;
+}
+.story-image.active{
+  opacity:1;
+  transform:scale(1);
+}
+.storyCaption{
+    position:relative;
+    z-index:3;
+    margin-top:20px;
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+	padding: 0 15px;
+}
+
+.storyCaption .title{
+    background:linear-gradient(90deg,#ff5f9e,#8d6cff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    color:transparent;
+}
+
+.storyCaption .heart{
+    color:initial;
+}
+
+
+html{
+  scrollbar-gutter:stable;
+}
+
+body.story-open{
+  overflow:hidden;
+  scrollbar-width:none;
+}
+
+body.story-open::-webkit-scrollbar{
+  display:none;
+}
+
 </style>
 </head>
 <body>
@@ -229,7 +320,7 @@ background:#fff7fb;
       </p>
       <div class="actions">
         <button class="primary" id="celebrate">Bấm để nhận bất ngờ 🎉</button>
-        <a class="btn secondary" href="#loi-chuc">Xem lời chúc 💌</a>
+        <a class="btn secondary" href="#loi-chuc" id="viewMessage">Xem lời chúc 💌</a>
       </div>
     </div>
   </main>
@@ -330,6 +421,120 @@ Anh yêu em nhiều hơn tất cả những gì lời nói có thể diễn tả
     document.getElementById('celebrate').textContent='Chúc em sinh nhật thật vui! 🥳';
   });
   setTimeout(burst,700);
+
+const btn = document.getElementById("viewMessage");
+
+btn.addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const overlay = document.getElementById("storyOverlay");
+  const imageA = document.getElementById("storyImageA");
+  const imageB = document.getElementById("storyImageB");
+
+  const photos = [
+    "images/01.jpg",
+    "images/02.jpg",
+    "images/03.jpg",
+    "images/04.jpg",
+    "images/05.jpg",
+    "images/06.jpg",
+    "images/07.jpg",
+    "images/08.jpg",
+    "images/09.jpg",
+    "images/10.jpg"
+  ];
+
+  // Tải trước toàn bộ ảnh để chuyển ảnh không gây nhấp nháy.
+  await Promise.all(
+    photos.map((src) => new Promise((resolve) => {
+      const preload = new Image();
+      preload.onload = resolve;
+      preload.onerror = resolve;
+      preload.src = src;
+    }))
+  );
+
+  imageA.src = photos[0];
+  imageA.classList.add("active");
+  imageB.classList.remove("active");
+  overlay.classList.add("show");
+  document.body.classList.add("story-open");
+
+  let currentImage = imageA;
+  let nextImage = imageB;
+
+  for (let i = 1; i < photos.length; i++) {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    nextImage.src = photos[i];
+
+    await new Promise((resolve) => {
+      if (nextImage.complete) {
+        resolve();
+      } else {
+        nextImage.onload = resolve;
+        nextImage.onerror = resolve;
+      }
+    });
+
+    nextImage.classList.add("active");
+    currentImage.classList.remove("active");
+
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
+    const temp = currentImage;
+    currentImage = nextImage;
+    nextImage = temp;
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  // Giữ lớp slideshow che kín màn hình trong lúc đổi vị trí trang.
+  const root = document.documentElement;
+  const body = document.body;
+  const oldRootBehavior = root.style.scrollBehavior;
+  const oldBodyBehavior = body.style.scrollBehavior;
+
+  root.style.scrollBehavior = "auto";
+  body.style.scrollBehavior = "auto";
+
+  const messageSection = document.getElementById("loi-chuc");
+  const messageTop = messageSection.getBoundingClientRect().top + window.pageYOffset;
+
+  // Nhảy ngầm tới lời chúc khi overlay vẫn hoàn toàn che kín màn hình.
+  window.scrollTo(0, messageTop);
+
+  // Ép trình duyệt hoàn tất layout và paint trước khi làm mờ overlay.
+  void messageSection.offsetHeight;
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  await new Promise((resolve) => setTimeout(resolve, 120));
+
+  // Chỉ sau khi trang đã đứng yên ở lời chúc mới làm slideshow biến mất.
+  overlay.classList.remove("show");
+  document.body.classList.remove("story-open");
+
+  setTimeout(() => {
+    root.style.scrollBehavior = oldRootBehavior;
+    body.style.scrollBehavior = oldBodyBehavior;
+    imageA.classList.remove("active");
+    imageB.classList.remove("active");
+  }, 700);
+});
+
 </script>
+
+<div id="storyOverlay" class="story-overlay">
+  <div class="story-stage">
+    <img id="storyImageA" class="story-image active" src="" alt="">
+    <img id="storyImageB" class="story-image" src="" alt="">
+  </div>
+  <div class="storyCaption">
+    <span class="heart">💕</span>
+    <span class="title">Những khoảnh khắc hạnh phúc của chúng mình</span>
+    <span class="heart">💕</span>
+</div>
+</div>
+
 </body>
 </html>

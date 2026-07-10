@@ -109,6 +109,12 @@
     section{padding:86px 18px}
     .wrap{width:min(1040px,100%);margin:auto}
     .section-title{text-align:center;font-size:clamp(30px,5vw,48px);margin:0 0 28px}
+    .section-title .title-text{
+      background:linear-gradient(90deg,var(--pink),var(--purple));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
     .wishes{
       display:grid;
       grid-template-columns:repeat(3,1fr);
@@ -123,6 +129,12 @@
     }
     .wish .icon{font-size:42px}
     .wish h3{margin:12px 0 8px}
+    .wish h3 .title-text{
+      background:linear-gradient(90deg,var(--pink),var(--purple));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
     .wish p{margin:0;line-height:1.65}
     .message{
       padding:34px;
@@ -207,7 +219,7 @@ background:#fff7fb;
     }
     h1, h2, h3 {
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      font-weight: 800; color: var(--pink);
+      font-weight: 800; 
     }
 
 
@@ -328,11 +340,11 @@ body.story-open::-webkit-scrollbar{
 
   <section>
     <div class="wrap">
-      <h2 class="section-title">Điều tuyệt vời dành cho em</h2>
+      <h2 class="section-title"><span class="title-text">Điều tuyệt vời dành cho em</span></h2>
       <div class="wishes">
-        <article class="wish"><div class="icon">🌸</div><h3>Luôn xinh đẹp</h3><p>Mỗi ngày đều tươi tắn, tự tin và tràn đầy năng lượng tích cực.</p></article>
-        <article class="wish"><div class="icon">💝</div><h3>Luôn hạnh phúc</h3><p>Luôn được yêu thương, trân trọng và ở bên những người thật lòng.</p></article>
-        <article class="wish"><div class="icon">🌟</div><h3>Luôn thành công</h3><p>Mọi dự định đều thuận lợi, mọi cố gắng đều nhận lại kết quả xứng đáng.</p></article>
+        <article class="wish"><div class="icon">🌸</div><h3><span class="title-text">Luôn xinh đẹp</span></h3><p>Mỗi ngày đều tươi tắn, tự tin và tràn đầy năng lượng tích cực.</p></article>
+        <article class="wish"><div class="icon">💝</div><h3><span class="title-text">Luôn hạnh phúc</span></h3><p>Luôn được yêu thương, trân trọng và ở bên những người thật lòng.</p></article>
+        <article class="wish"><div class="icon">🌟</div><h3><span class="title-text">Luôn thành công</span></h3><p>Mọi dự định đều thuận lợi, mọi cố gắng đều nhận lại kết quả xứng đáng.</p></article>
       </div>
     </div>
   </section>
@@ -341,7 +353,7 @@ body.story-open::-webkit-scrollbar{
 
 <section>
   <div class="wrap">
-    <h2 class="section-title">📸 Những khoảnh khắc của chúng mình</h2>
+    <h2 class="section-title">📸 <span class="title-text">Những khoảnh khắc của chúng mình</span></h2>
     <p style="text-align:center;color:#777;margin-top:-10px">
       Mỗi bức ảnh là một kỷ niệm, mỗi nụ cười là một lý do để anh yêu em nhiều hơn ❤️
     </p>
@@ -364,7 +376,7 @@ body.story-open::-webkit-scrollbar{
 
 <section id="loi-chuc">
     <div class="wrap">
-      <h2 class="section-title">Một lời chúc thật lòng 💌</h2>
+      <h2 class="section-title"><span class="title-text">Một lời chúc thật lòng</span> 💌</h2>
       <div class="message" contenteditable="true">
         Có lẽ điều tuyệt vời nhất trong cuộc đời anh là được gặp em. ❤️<br><br>
 

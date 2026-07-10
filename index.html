@@ -431,10 +431,52 @@ body.story-open::-webkit-scrollbar{
     }
 }
 
+
+
+/* ===== Trình chiếu sinh nhật 7 bước ===== */
+#viewMessage{display:none}
+#celebrate.is-running{opacity:.65;pointer-events:none;transform:none}
+.cinematic-intro{
+  position:fixed;inset:0;z-index:10020;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:rgba(25,12,28,.94);opacity:0;visibility:hidden;
+  transition:opacity .6s ease,visibility .6s ease;
+}
+.cinematic-intro.show{opacity:1;visibility:visible}
+.cinematic-intro-text{max-width:850px;text-align:center;color:#fff;font-size:clamp(28px,5vw,58px);font-weight:800;line-height:1.35;animation:introPulse 1.8s ease-in-out infinite}
+@keyframes introPulse{50%{transform:scale(1.025);text-shadow:0 0 32px rgba(255,125,180,.75)}}
+.story-progress{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:min(92vw,900px);display:flex;gap:6px;z-index:6}
+.story-progress span{height:4px;flex:1;background:rgba(255,255,255,.35);border-radius:99px;overflow:hidden}
+.story-progress span::after{content:"";display:block;width:0;height:100%;background:#fff;border-radius:inherit}
+.story-progress span.done::after{width:100%}
+.story-progress span.playing::after{animation:storyFill 2.5s linear forwards}
+@keyframes storyFill{to{width:100%}}
+.story-image.active{animation:kenBurns 2.5s ease-out forwards}
+@keyframes kenBurns{from{transform:scale(1.01)}to{transform:scale(1.085)}}
+.story-end-card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;background:rgba(37,16,39,.82);opacity:0;visibility:hidden;z-index:8;transition:.55s}
+.story-end-card.show{opacity:1;visibility:visible}
+.story-end-card div{text-align:center;color:#fff;font-size:clamp(28px,5vw,56px);font-weight:800;line-height:1.35}
+.reveal-message{opacity:0;transform:translateY(32px);transition:opacity .9s ease,transform .9s ease}
+.reveal-message.show{opacity:1;transform:none}
+.final-love{text-align:center;padding:16px 18px 72px;font-size:clamp(26px,5vw,48px);font-weight:800;color:var(--pink);animation:heartBeat 1.5s ease-in-out infinite}
+@keyframes heartBeat{50%{transform:scale(1.07)}}
+.floating-heart{position:fixed;z-index:10050;pointer-events:none;font-size:18px;animation:heartFly 1.5s ease-out forwards}
+@keyframes heartFly{to{transform:translateY(-90px) scale(1.5) rotate(18deg);opacity:0}}
+.sparkles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.sparkles i{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 12px #fff;animation:twinkle 2.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.65)}50%{opacity:.9;transform:scale(1.35)}}
+
 </style>
 </head>
 <body>
+<div class="sparkles" id="sparkles" aria-hidden="true"></div>
+<div class="cinematic-intro" id="cinematicIntro"><div class="cinematic-intro-text">💖 Anh có một điều muốn dành riêng cho em...</div></div>
   <canvas id="confetti"></canvas>
+
+  <audio id="bgMusic" loop>
+    <source src="music/happy-birthday.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicToggle" style="position:fixed;left:20px;bottom:20px;z-index:1000;border:none;border-radius:50%;width:52px;height:52px;background:#ff5f9e;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.2)">🔊</button>
+
 
   <main class="hero">
     <div class="balloon b1"></div><div class="balloon b2"></div>
@@ -512,6 +554,8 @@ Anh yêu em nhiều hơn tất cả những gì lời nói có thể diễn tả
     </div>
   </section>
 
+  <div class="final-love">❤️ Love you forever ❤️</div>
+
   <footer class="footer">
     Made with love • Happy Birthday 🎈
   </footer>
@@ -528,169 +572,125 @@ Anh yêu em nhiều hơn tất cả những gì lời nói có thể diễn tả
 </button>
 
 <script>
-  const canvas = document.getElementById('confetti');
-  const ctx = canvas.getContext('2d');
-  let pieces = [];
-  function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
-  addEventListener('resize',resize); resize();
-
-  function burst(){
-    pieces = Array.from({length:180},()=>({
-      x:innerWidth/2, y:innerHeight*.45,
-      vx:(Math.random()-.5)*14,
-      vy:Math.random()*-11-3,
-      g:.22+Math.random()*.12,
-      r:3+Math.random()*5,
-      a:1,
-      c:['#ff5f9e','#8d6cff','#ffd36f','#63d8ce','#ffffff'][Math.floor(Math.random()*5)]
-    }));
-    animate();
-  }
-  function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.a-=.006;
-      ctx.globalAlpha=Math.max(p.a,0);
-      ctx.fillStyle=p.c;
-      ctx.fillRect(p.x,p.y,p.r,p.r*1.8);
-    });
-    pieces=pieces.filter(p=>p.a>0 && p.y<innerHeight+50);
-    ctx.globalAlpha=1;
-    if(pieces.length) requestAnimationFrame(animate);
-  }
-  document.getElementById('celebrate').addEventListener('click',()=>{
-    burst();
-    document.getElementById('celebrate').textContent='Chúc Vợ Yêu sinh nhật thật vui! 🥳';
-  });
-  setTimeout(burst,700);
-
-const btn = document.getElementById("viewMessage");
-
-btn.addEventListener("click", async (e) => {
-  e.preventDefault();
-
-  const overlay = document.getElementById("storyOverlay");
-  const imageA = document.getElementById("storyImageA");
-  const imageB = document.getElementById("storyImageB");
-
-  const photos = [
-    "images/01.jpg",
-    "images/02.jpg",
-    "images/03.jpg",
-    "images/04.jpg",
-    "images/05.jpg",
-    "images/06.jpg",
-    "images/07.jpg",
-    "images/08.jpg",
-    "images/09.jpg",
-    "images/10.jpg"
-  ];
-
-  // Tải trước toàn bộ ảnh để chuyển ảnh không gây nhấp nháy.
-  await Promise.all(
-    photos.map((src) => new Promise((resolve) => {
-      const preload = new Image();
-      preload.onload = resolve;
-      preload.onerror = resolve;
-      preload.src = src;
-    }))
-  );
-
-  imageA.src = photos[0];
-  imageA.classList.add("active");
-  imageB.classList.remove("active");
-  overlay.classList.add("show");
-  document.body.classList.add("story-open");
-
-  let currentImage = imageA;
-  let nextImage = imageB;
-
-  for (let i = 1; i < photos.length; i++) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    nextImage.src = photos[i];
-
-    await new Promise((resolve) => {
-      if (nextImage.complete) {
-        resolve();
-      } else {
-        nextImage.onload = resolve;
-        nextImage.onerror = resolve;
-      }
-    });
-
-    nextImage.classList.add("active");
-    currentImage.classList.remove("active");
-
-    await new Promise((resolve) => setTimeout(resolve, 700));
-
-    const temp = currentImage;
-    currentImage = nextImage;
-    nextImage = temp;
-  }
-
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Giữ lớp slideshow che kín màn hình trong lúc đổi vị trí trang.
-  const root = document.documentElement;
-  const body = document.body;
-  const oldRootBehavior = root.style.scrollBehavior;
-  const oldBodyBehavior = body.style.scrollBehavior;
-
-  root.style.scrollBehavior = "auto";
-  body.style.scrollBehavior = "auto";
-
-  const messageSection = document.getElementById("loi-chuc");
-  const messageTop = messageSection.getBoundingClientRect().top + window.pageYOffset;
-
-  // Nhảy ngầm tới lời chúc khi overlay vẫn hoàn toàn che kín màn hình.
-  window.scrollTo(0, messageTop);
-
-  // Chờ 1 frame để trình duyệt cập nhật vị trí rồi fade ngay.
-  await new Promise(requestAnimationFrame);
-
-  // Fade overlay ngay sau khi trang đã cập nhật.
-  overlay.classList.remove("show");
-  document.body.classList.remove("story-open");
-
-  setTimeout(() => {
-    root.style.scrollBehavior = oldRootBehavior;
-    body.style.scrollBehavior = oldBodyBehavior;
-    imageA.classList.remove("active");
-    imageB.classList.remove("active");
-  }, 700);
+const bgMusic=document.getElementById('bgMusic');
+const musicToggle=document.getElementById('musicToggle');
+let musicStarted=false;
+async function startMusic(){
+  if(!bgMusic.paused) return;
+  try{bgMusic.volume=.45;await bgMusic.play();musicStarted=true;musicToggle.textContent='🔊';}catch(e){musicToggle.textContent='🔇';}
+}
+musicToggle.addEventListener('click',async()=>{
+  if(bgMusic.paused){await startMusic();}else{bgMusic.pause();musicToggle.textContent='🔇';}
 });
 
+const canvas=document.getElementById('confetti');
+const ctx=canvas.getContext('2d');
+let pieces=[];
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
+addEventListener('resize',resize);resize();
+function burst(){
+  pieces=Array.from({length:180},()=>({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*14,vy:Math.random()*-11-3,g:.22+Math.random()*.12,r:3+Math.random()*5,a:1,c:['#ff5f9e','#8d6cff','#ffd36f','#63d8ce','#ffffff'][Math.floor(Math.random()*5)]}));
+  animate();
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.a-=.006;ctx.globalAlpha=Math.max(p.a,0);ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,p.r,p.r*1.8)});
+  pieces=pieces.filter(p=>p.a>0&&p.y<innerHeight+50);ctx.globalAlpha=1;if(pieces.length)requestAnimationFrame(animate);
+}
 
-  // Hiện nút khi người dùng cuộn xuống và cuộn mượt về đầu trang khi bấm.
-  const backToTop = document.getElementById('backToTop');
-  const toggleBackToTop = () => {
-    backToTop.classList.toggle('show', window.scrollY > 300);
-  };
-  window.addEventListener('scroll', toggleBackToTop, { passive: true });
-  toggleBackToTop();
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const photos=Array.from({length:10},(_,i)=>`images/${String(i+1).padStart(2,'0')}.jpg`);
+let sequenceRunning=false;
+async function preloadPhotos(){
+  await Promise.all(photos.map(src=>new Promise(resolve=>{const im=new Image();im.onload=im.onerror=resolve;im.src=src;})));
+}
+async function runBirthdaySequence(){
+  if(sequenceRunning)return;sequenceRunning=true;
+  const celebrate=document.getElementById('celebrate');
+  celebrate.classList.add('is-running');
+  celebrate.textContent='Món quà đang mở... 💖';
+  await startMusic();
+  burst();
+  await wait(650);
 
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  const intro=document.getElementById('cinematicIntro');
+  intro.classList.add('show');
+  await wait(2300);
 
+  const overlay=document.getElementById('storyOverlay');
+  const imageA=document.getElementById('storyImageA');
+  const imageB=document.getElementById('storyImageB');
+  const progress=[...document.querySelectorAll('.story-progress span')];
+  await preloadPhotos();
+  overlay.classList.add('show');
+  document.body.classList.add('story-open');
+  intro.classList.remove('show');
+  await wait(650);
+
+  let current=imageA,next=imageB;
+  for(let i=0;i<photos.length;i++){
+    current.src=photos[i];
+    await new Promise(resolve=>{if(current.complete)resolve();else{current.onload=current.onerror=resolve;}});
+    current.classList.add('active');
+    progress[i].classList.add('playing');
+    await wait(2500);
+    progress[i].classList.remove('playing');
+    progress[i].classList.add('done');
+    if(i<photos.length-1){
+      next.src=photos[i+1];
+      await new Promise(resolve=>{if(next.complete)resolve();else{next.onload=next.onerror=resolve;}});
+      next.classList.add('active');current.classList.remove('active');
+      const t=current;current=next;next=t;
+    }
+  }
+
+  const endCard=document.getElementById('storyEndCard');
+  endCard.classList.add('show');
+  await wait(2400);
+
+  const messageSection=document.getElementById('loi-chuc');
+  const root=document.documentElement,body=document.body;
+  const oldRoot=root.style.scrollBehavior,oldBody=body.style.scrollBehavior;
+  root.style.scrollBehavior='auto';body.style.scrollBehavior='auto';
+  window.scrollTo(0,messageSection.getBoundingClientRect().top+window.pageYOffset);
+  await new Promise(requestAnimationFrame);
+  overlay.classList.remove('show');document.body.classList.remove('story-open');
+  await wait(700);
+  root.style.scrollBehavior=oldRoot;body.style.scrollBehavior=oldBody;
+  document.querySelector('.message').classList.add('show');
+  celebrate.classList.remove('is-running');
+  celebrate.textContent='Chúc Vợ Yêu sinh nhật thật vui! 🥳';
+}
+
+document.getElementById('celebrate').addEventListener('click',runBirthdaySequence);
+
+const backToTop=document.getElementById('backToTop');
+const toggleBackToTop=()=>backToTop.classList.toggle('show',window.scrollY>300);
+window.addEventListener('scroll',toggleBackToTop,{passive:true});toggleBackToTop();
+backToTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+const message=document.querySelector('.message');message.classList.add('reveal-message');
+
+const sparkles=document.getElementById('sparkles');
+for(let i=0;i<40;i++){
+  const star=document.createElement('i');star.style.left=Math.random()*100+'%';star.style.top=Math.random()*100+'%';star.style.animationDelay=(Math.random()*2.6)+'s';star.style.animationDuration=(1.8+Math.random()*2.2)+'s';sparkles.appendChild(star);
+}
+let lastHeart=0;
+document.addEventListener('pointermove',e=>{
+  const now=Date.now();if(now-lastHeart<90)return;lastHeart=now;
+  const h=document.createElement('span');h.className='floating-heart';h.textContent=Math.random()>.5?'💖':'💕';h.style.left=e.clientX+'px';h.style.top=e.clientY+'px';document.body.appendChild(h);setTimeout(()=>h.remove(),1500);
+});
 </script>
 
 <div id="storyOverlay" class="story-overlay">
-  <div class="storyTitle">
-    <span class="icon">🎂</span>
-    <span class="title">Chúc Mừng Sinh Nhật Vợ Yêu</span>
-    <span class="icon">❤️</span>
-  </div>
+  <div class="story-progress"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="storyTitle"><span class="icon">🎂</span><span class="title">Chúc Mừng Sinh Nhật Vợ Yêu</span><span class="icon">❤️</span></div>
   <div class="story-stage">
-    <img id="storyImageA" class="story-image active" src="" alt="">
-    <img id="storyImageB" class="story-image" src="" alt="">
+    <img id="storyImageA" class="story-image" src="" alt="Kỷ niệm của chúng mình">
+    <img id="storyImageB" class="story-image" src="" alt="Kỷ niệm của chúng mình">
   </div>
-  <div class="storyCaption">
-    <span class="heart">💕</span>
-    <span class="title">Những khoảnh khắc hạnh phúc của chúng mình</span>
-    <span class="heart">💕</span>
-</div>
+  <div class="storyCaption"><span class="heart">💕</span><span class="title">Những khoảnh khắc hạnh phúc của chúng mình</span><span class="heart">💕</span></div>
+  <div id="storyEndCard" class="story-end-card"><div>Cảm ơn em vì đã xuất hiện trong cuộc đời anh ❤️</div></div>
 </div>
 
 </body>

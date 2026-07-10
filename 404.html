@@ -274,6 +274,9 @@ background:#fff7fb;
   font-size:clamp(30px,4.5vw,54px);
   font-weight:800;
   line-height:1.2;
+  animation:storyTitlePulse 1.8s ease-in-out infinite;
+  transform-origin:center;
+  will-change:transform;
 }
 .storyTitle .title{
   background:linear-gradient(90deg,var(--pink),var(--purple));
@@ -446,6 +449,7 @@ body.story-open::-webkit-scrollbar{
 .cinematic-intro.show{opacity:1;visibility:visible;pointer-events:auto}
 .cinematic-intro-text{max-width:850px;text-align:center;color:#fff;font-size:clamp(28px,5vw,58px);font-weight:800;line-height:1.35;animation:introPulse 1.8s ease-in-out infinite}
 @keyframes introPulse{50%{transform:scale(1.025);text-shadow:0 0 32px rgba(255,125,180,.75)}}
+@keyframes storyTitlePulse{50%{transform:scale(1.025)}}
 .story-progress{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:min(92vw,900px);display:flex;gap:6px;z-index:6}
 .story-progress span{height:4px;flex:1;background:rgba(255,255,255,.35);border-radius:99px;overflow:hidden}
 .story-progress span::after{content:"";display:block;width:0;height:100%;background:#fff;border-radius:inherit}

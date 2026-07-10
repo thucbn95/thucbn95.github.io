@@ -497,7 +497,7 @@ body.story-open::-webkit-scrollbar{
   left:10px;
   bottom:10px;
   background:none;
-  //box-shadow:0 12px 30px rgba(255,95,158,.35);
+  /* box-shadow:0 12px 30px rgba(255,95,158,.35); */
 }
 .music-toggle span{
   display:block;
@@ -513,6 +513,136 @@ body.story-open::-webkit-scrollbar{
 .back-to-top svg{display:block;margin:0}
 @media (max-width:760px){
   .music-toggle{left:5px;bottom:5px}
+}
+
+
+/* ===== Chống tràn ngang trên mobile ===== */
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:clip;
+}
+
+body{
+  position:relative;
+}
+
+main,
+section,
+footer,
+.hero,
+.wrap,
+.card,
+.wishes,
+.wish,
+.gallery,
+.frame,
+.message,
+.story-overlay,
+.story-stage,
+.storyTitle,
+.storyCaption,
+.cinematic-intro,
+.cinematic-intro-text{
+  min-width:0;
+  max-width:100%;
+}
+
+img,
+svg,
+canvas{
+  max-width:100%;
+}
+
+.story-overlay,
+.cinematic-intro,
+.sparkles{
+  overflow:hidden;
+}
+
+.storyTitle,
+.storyCaption,
+.section-title,
+.lead,
+.message,
+.wish p{
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+
+@media (max-width:760px){
+  html,
+  body{
+    overflow-x:clip !important;
+  }
+
+  .hero,
+  section{
+    width:100%;
+    max-width:100%;
+    overflow:hidden;
+  }
+
+  .card{
+    width:100%;
+    max-width:100%;
+  }
+
+  .wrap{
+    width:100%;
+    max-width:100%;
+  }
+
+  .gallery{
+    grid-template-columns:minmax(0,1fr);
+    width:100%;
+  }
+
+  .frame,
+  .frame:hover{
+    width:100%;
+    max-width:100%;
+    transform:none;
+  }
+
+  .storyTitle{
+    width:calc(100vw - 28px);
+    max-width:calc(100vw - 28px);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .story-stage{
+    width:calc(100vw - 20px);
+    max-width:calc(100vw - 20px);
+  }
+
+  .storyCaption{
+    width:calc(100vw - 24px);
+    max-width:calc(100vw - 24px);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .story-progress{
+    width:calc(100vw - 24px);
+    max-width:calc(100vw - 24px);
+  }
+
+  .cinematic-intro-text{
+    width:calc(100vw - 36px);
+    max-width:calc(100vw - 36px);
+  }
+
+  .music-toggle,
+  .back-to-top{
+    max-width:54px;
+  }
+
+  .music-toggle span{
+    width:1em;
+  }
 }
 
 </style>

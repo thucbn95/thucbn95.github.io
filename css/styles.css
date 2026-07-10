@@ -648,7 +648,7 @@ canvas{
 /* ===== Noto Color Emoji cục bộ — 14 emoji của website ===== */
 @font-face{
   font-family:"Noto Color Emoji Local";
-  src:url("fonts/NotoColorEmoji-14.woff2") format("woff2");
+  src:url("/fonts/NotoColorEmoji-14.woff2") format("woff2");
   font-weight:400;
   font-style:normal;
   font-display:swap;
